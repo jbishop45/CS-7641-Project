@@ -8,20 +8,18 @@ Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailin
 
 ### Dataset & Features
 Our primary dataset is a 27297x10396 array<sup>[5]</sup>. Rows indicate genes, and columns indicate mouse stem cells collected over a 7-day differentiation protocol. Entries are unique observations of mRNAs encoding gene R in cell C. Two authors have identified 5 cell-types at 3 stages of maturity in these data<sup>[3,5]</sup>.
-Genes with few observations are statistically unreliable, and dead cells are a source of confounding noise. Regressing gene expression against background processes (e.g. mitosis) further reduces noise. After cleaning, typical scRNAseq analyses focus on 100s-1000s of genes in 1000-5000 cells<sup>[6]</sup>.
+Genes with few observations are statistically unreliable, and dead cells are a source of confounding noise. Regressing gene expression against background processes (e.g. mitosis) further reduces noise. After cleaning, typical scRNA-seq analyses focus on 100s-1000s of genes in 1000-5000 cells<sup>[6]</sup>.
 
 ## Problem definition & Motivation
-
-![Proposal Figure](proposal_figure.PNG)
-
 Robust methods for interpreting transcriptomic<sup>I</sup> responses to arbitrary stimuli can yield insights into disease state evolution and aid in the development of novel therapies. Diffusion Pseudotime<sup>III</sup> analysis (DPT) is a method for ordering cells along a continuous process and is robust to batch effects on sampling density and sequencing depth, making it a flexible tool for classifying cells<sup>[3]</sup>.
 Our goals are: (1) identify distinct populations of cells differentiating from a common origin, and (2) determine the physiological role of those populations.
 
 ### Methods:
+![Proposal Figure](proposal_figure.PNG)
 #### Unsupervised Subproject - Graph Inference
-We will obtain a graph of nearest-neighbor cells in transcriptomic<sup>I</sup> space from the unsupervised classifier <code>sklearn.neighbors.NearestNeighbors</code>, then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup>. <code>scanpy.tl.dpt</code> can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic<sup>I</sup> space of mature cells.
+We obtain a graph of nearest-neighbor cells in transcriptomic<sup>I</sup> space from the unsupervised classifier <code>sklearn.neighbors.NearestNeighbors</code>, then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup> (see figure above). <code>scanpy.tl.dpt</code> can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic<sup>I</sup> space of mature cells.
 #### Supervised Subproject - Graph Annotation
-We will determine the physiological role of the differentiated cells by mapping their transcriptomes<sup>I</sup> to representative transcriptomes<sup>I</sup> of labeled cell-types using <code>scanpy.tl.ingest</code>, which takes in a dimensionality-reduced representation of the reference data generated with <code>scanpy.tl.umap</code>.
+We determine the physiological role of the differentiated cells by mapping their transcriptomes<sup>I</sup> to representative transcriptomes<sup>I</sup> of labeled cell-types using <code>scanpy.tl.ingest</code>, which takes in a dimensionality-reduced representation of the reference data generated with <code>scanpy.tl.umap</code>.
 
 ### Potential results and Discussion
 #### Research Questions
@@ -30,7 +28,7 @@ We will determine the physiological role of the differentiated cells by mapping 
 * **RQ2.** Can we determine the identity of cells near terminal points in the above process using scRNA-seq data?
 
 #### Quantitative Metrics 
-_Unsupervised_ - We will use a clustering dispersion metric (ex. Calinski-Harabasz Index) to evaluate the quality of our KNN clusters. We will use kendall rank correlation<sup>[3]</sup> to compare pseudotemporal ordering of cells to the collection time of those cells. Good correlation will indicate that the transition matrix orders cells according to primarily time-driven processes.
+_Unsupervised_ - We use a clustering dispersion metric (ex. Calinski-Harabasz Index) to evaluate the quality of our KNN clusters. We use kendall rank correlation<sup>[3]</sup> to compare pseudotemporal ordering of cells to the collection time of those cells. Good correlation will indicate that the transition matrix orders cells according to primarily time-driven processes.
 
 _Supervised_ - Given the ground truths, we can employ matching-based (ex. F-measure), entropy-based (ex. Normalized mutual information), or pairwise measures (ex. Jaccard coefficient) to evaluate supervised classification.
 
