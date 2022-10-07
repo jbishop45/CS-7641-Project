@@ -1,5 +1,7 @@
 # Trajectory Analysis and Cluster Labeling of Single-Cell mRNA Sequencing Data
+<h4 style="text-align:right">
 Josh Bishop, Anjana Dissanayaka, Vishal Manickman, Nina Moorman, Jay Wroe
+</h4>
 ## Introduction/Background 
 ### Topic
 Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailing the transcriptomesI of billions of cells, generating insights ranging from biomarkersII of disease states to the discovery of new cell-types. Diverse methods for generating these data cause high variability in the number & similarity of cells sequenced, and mRNAs sequenced per cell[6,11,12]. Developing robust methods for sc-RNAseq analysis is critical to standardizing analytical results and expediting scientific discoveries[6,11,12].
