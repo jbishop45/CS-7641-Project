@@ -10,7 +10,7 @@ Genes with few observations are statistically unreliable, and dead cells are a s
 
 ## Problem definition & Motivation
 
-![Proposal Figure](proposal_figure.png)
+![Proposal Figure](proposal_figure.PNG)
 
 Robust methods for interpreting transcriptomicI responses to arbitrary stimuli can yield insights into disease state evolution and aid in the development of novel therapies. Diffusion PseudotimeIII analysis (DPT) is a method for ordering cells along a continuous process and is robust to batch effects on sampling density and sequencing depth, making it a flexible tool for classifying cells[3].
 Our goals are: (1) identify distinct populations of cells differentiating from a common origin, and (2) determine the physiological role of those populations.
