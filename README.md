@@ -1,7 +1,10 @@
 # Trajectory Analysis of Single-Cell mRNA Sequencing Data 
 **Authors:** Josh Bishop, Anjana Dissanayaka, Vishal Manickman, Nina Moorman, Jay Wroe
+
 **Instructor:** Prof. Mahdi Roozbahani
+
 **Submitted:** October 7, 2022
+
 ## Introduction/Background 
 ### Topic
 Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailing the transcriptomes<sup>I</sup> of billions of cells, generating insights ranging from biomarkers<sup>II</sup> of disease states to the discovery of new cell-types. Diverse methods for generating these data cause high variability in the number & similarity of cells sequenced, and mRNAs sequenced per cell<sup>[6,11,12]</sup>. Developing robust methods for sc-RNAseq analysis is critical to standardizing analytical results and expediting scientific discoveries<sup>[6,11,12]</sup>.
