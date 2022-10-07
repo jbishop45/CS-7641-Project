@@ -23,9 +23,9 @@ We will determine the physiological role of the differentiated cells by mapping 
 
 ### Potential results and Discussion
 #### Research Questions
-* RQ1. Can we order cells along an arbitrary branching process using scRNA-seq data? 
+* **RQ1.** Can we order cells along an arbitrary branching process using scRNA-seq data? 
 
-* RQ2. Can we determine the identity of cells near terminal points in the above process using scRNA-seq data?
+* **RQ2.** Can we determine the identity of cells near terminal points in the above process using scRNA-seq data?
 
 #### Quantitative Metrics 
 _Unsupervised_ - We will use a clustering dispersion metric (ex. Calinski-Harabasz Index) to evaluate the quality of our KNN clusters. We will use kendall rank correlation<sup>[3]</sup> to compare pseudotemporal ordering of cells to the collection time of those cells. Good correlation will indicate that the transition matrix orders cells according to primarily time-driven processes.
@@ -55,6 +55,6 @@ All methods will use a Euclidean distance metric in transcriptomic<sup>I</sup> s
 - MacParland, S.A., Liu, J.C., Ma, XZ. _et al_. Single cell RNA sequencing of human liver reveals distinct intrahepatic macrophage populations. _Nat Commun_ 9, 4383 (2018). https://doi.org/10.1038/s41467-018-06318-7 
 - Mu, T., Xu, L., Zhong, Y. _et al_. Embryonic liver developmental trajectory revealed by single-cell RNA sequencing in the Foxa2eGFP mouse. _Commun Biol_ 3, 642 (2020). https://doi.org/10.1038/s42003-020-01364-8 
 - Pedregosa, F. _et al_. Scikit-Learn: Machine Learning in Python. _Scikit-Learn_ 12, 2825–2830 (2011). https://dl.acm.org/doi/10.5555/1953048.2078195 
-- Wolf, F., Angerer, P. & Theis, F. SCANPY: large-scale single-cell gene expression data analysis. Genome Biol 19, 15 (2018). https://doi.org/10.1186/s13059-017-1382-0 
-- Zappia L, Phipson B, Oshlack A. Exploring the single-cell RNA-seq analysis landscape with the scRNA-tools database. PLoS Comput Biol 14(6): e1006245 (2018). https://doi.org/10.1371/journal.pcbi.1006245 
+- Wolf, F., Angerer, P. & Theis, F. SCANPY: large-scale single-cell gene expression data analysis. _Genome Biol_ 19, 15 (2018). https://doi.org/10.1186/s13059-017-1382-0 
+- Zappia L, Phipson B, Oshlack A. Exploring the single-cell RNA-seq analysis landscape with the scRNA-tools database. _PLoS Comput Biol_ 14(6): e1006245 (2018). https://doi.org/10.1371/journal.pcbi.1006245 
 - Zappia, L., Theis, F.J. Over 1000 tools reveal trends in the single-cell RNA-seq analysis landscape. _Genome Biol_ 22, 301 (2021). https://doi.org/10.1186/s13059-021-02519-4
