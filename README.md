@@ -35,7 +35,7 @@ All methods will use a Euclidean distance metric in transcriptomic space.
 
 ## Proposed Timeline & Contribution Table
 
-
+![Proposal Timeline](proposal_timeline.png)
 
 
 ## Definition of Terms
