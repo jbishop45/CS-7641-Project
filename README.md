@@ -1,7 +1,5 @@
 # Trajectory Analysis of Single-Cell mRNA Sequencing Data 
-<h4 style="text-align:left">
 Josh Bishop, Anjana Dissanayaka, Vishal Manickman, Nina Moorman, Jay Wroe
-</h4>
 ## Introduction/Background 
 ### Topic
 Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailing the transcriptomesI of billions of cells, generating insights ranging from biomarkersII of disease states to the discovery of new cell-types. Diverse methods for generating these data cause high variability in the number & similarity of cells sequenced, and mRNAs sequenced per cell<sup>[6,11,12]</sup>. Developing robust methods for sc-RNAseq analysis is critical to standardizing analytical results and expediting scientific discoveries<sup>[6,11,12]</sup>]</sup>.
@@ -19,9 +17,9 @@ Our goals are: (1) identify distinct populations of cells differentiating from a
 
 ### Methods:
 #### Unsupervised Subproject - Graph Inference
-We will obtain a graph of nearest-neighbor cells in transcriptomic space from the unsupervised classifier '''python sklearn.neighbors.NearestNeighbors''', then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup>. scanpy.tl.dpt can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic space of mature cells.
+We will obtain a graph of nearest-neighbor cells in transcriptomic space from the unsupervised classifier <code>sklearn.neighbors.NearestNeighbors</code>, then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup>. <code>scanpy.tl.dpt</code> can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic space of mature cells.
 #### Supervised Subproject - Graph Annotation
-We will determine the physiological role of the differentiated cells by mapping their transcriptomes to representative transcriptomes of labeled cell-types using scanpy.tl.ingest, which takes in a dimensionality-reduced representation of the reference data generated with scanpy.tl.umap.
+We will determine the physiological role of the differentiated cells by mapping their transcriptomes to representative transcriptomes of labeled cell-types using <code>scanpy.tl.ingest</code>, which takes in a dimensionality-reduced representation of the reference data generated with <code>scanpy.tl.umap</code>.
 
 ### Potential results and Discussion
 #### Research Questions
