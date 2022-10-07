@@ -1,4 +1,4 @@
-# CS 7641 Project Proposal - 
+# Trajectory Analysis and Cluster Labeling of Single-Cell mRNA Sequencing Data
 Josh Bishop, Anjana Dissanayaka, Vishal Manickman, Nina Moorman, Jay Wroe
 ## Introduction/Background 
 ### Topic
