@@ -13,11 +13,12 @@ Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailin
 Our primary dataset is a 27297x10396 array<sup>[5]</sup>. Rows indicate genes, and columns indicate mouse stem cells collected over a 7-day differentiation protocol. Entries are unique observations of mRNAs encoding gene R in cell C. Prior work has identified 5 cell-types at 3 stages of maturity in these data<sup>[3,5]</sup>.
 Genes with few observations are statistically unreliable, and dead cells are a source of confounding noise. Regressing gene expression against background processes (e.g. mitosis) further reduces noise. After cleaning, typical scRNA-seq analyses focus on 100s-1000s of genes in 1000-5000 cells<sup>[6]</sup>.
 
-## Problem definition & Motivation
+## Problem Definition & Motivation
 Robust methods for interpreting transcriptomic<sup>I</sup> responses to arbitrary stimuli can yield insights into disease state evolution and aid in the development of novel therapies. Diffusion Pseudotime<sup>III</sup> analysis (DPT) is a method for ordering cells along a continuous process and is robust to batch effects on sampling density and sequencing depth, making it a flexible tool for classifying cells<sup>[3]</sup>.
 Our goals are: (1) identify distinct populations of cells differentiating from a common origin, and (2) determine the physiological role of those populations.
 
 ![Proposal Figure](proposal_figure.png)
+
 ### Methods:
 #### Unsupervised Subproject - Graph Inference
 We obtain a graph of nearest-neighbor cells in transcriptomic<sup>I</sup> space from the unsupervised classifier <code>sklearn.neighbors.NearestNeighbors</code>, then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup> (see figure above). <code>scanpy.tl.dpt</code> can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic<sup>I</sup> space of mature cells.
