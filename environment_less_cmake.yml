@@ -4,9 +4,9 @@ channels:
  - bioconda
 dependencies:
  - python>=3.5, <3.7
- - cmake>=3.9, <3.11
- - r-essentials
- - r-rgl
+#- cmake>=3.9, <3.11
+#- r-essentials
+#- r-rgl
  - pandas
  - numpy
  - scipy
@@ -31,12 +31,12 @@ dependencies:
  - python-igraph
  - louvain
  - r-rngtools
-# - bioconductor-rhdf5lib
+#- bioconductor-rhdf5lib
  - pip
  - pip:
-   - MulticoreTSNE
+#  - MulticoreTSNE
    - anndata
-   - fa2
+#  - fa2
    - gprofiler-official
    - scanpy
    - rpy2
