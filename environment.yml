@@ -40,5 +40,5 @@ dependencies:
    - gprofiler-official
    - scanpy
    - rpy2
-   - git+https://github.com/flying-sheep/anndata2ri
+#   - git+https://github.com/flying-sheep/anndata2ri
    
