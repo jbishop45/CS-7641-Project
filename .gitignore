@@ -1,3 +1,4 @@
 __pycache__
 .ipynb_checkpoints
 GSE72857_accession_formatted.csv
+*.h5ad

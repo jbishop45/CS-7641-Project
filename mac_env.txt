@@ -2,7 +2,7 @@ conda create --name ml_project --python=3.7.3
 conda activate ml_env
 conda update --all
 conda install pandas numpy scipy scikit-learn jupyter gsl tzlocal simplegeneric natsort h5py tqdm patsy llvmlite matplotlib numba networkx joblib numexpr pytables seaborn statsmodels pip
-conda install -c conda-forge python-igraph louvain
+conda install -c conda-forge python-igraph louvain dataclasses leidenalg
 
 pip install --upgrade pip
 pip install MulticoreTSNE anndata anndata2ri fa2 gprofiler-official scanpy rpy2

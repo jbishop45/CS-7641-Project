@@ -31,7 +31,9 @@ dependencies:
  - python-igraph
  - louvain
  - r-rngtools
-# - bioconductor-rhdf5lib
+#- bioconductor-rhdf5lib
+ - dataclasses
+ - leidenalg
  - pip
  - pip:
    - MulticoreTSNE

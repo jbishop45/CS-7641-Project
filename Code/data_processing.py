@@ -44,3 +44,13 @@ class SCpipeline():
 		axs[1].hist(number_of_genes[np.where((number_of_genes<=maxgenes) & (number_of_genes >= mingenes))],bins=min([200,int(maxgenes/20)]),cumulative=False)
 
 	def remove_dead_cells(self, min_gene_counts = 1, min_count_depth = 300, min_genes_per_cell = 500)
+		####
+		# WITHIN OUR NOTEBOOK I WOULD ADVIZE MAKINGA DEEP COPY OF THE DATA AND CALLING THIS FUNCTION ON THE COPY, THIS WILL SAVE YOU FROM HAVING TO RE-IMPORT THE CSV
+		####
+		
+		sc.pp.filter_genes(adata_filtered, min_counts = 1)
+		# print(adata_filtered.X.shape)
+		sc.pp.filter_cells(adata_filtered, min_counts = 300)
+		# print(adata_filtered.X.shape)
+		sc.pp.filter_cells(adata_filtered, min_genes = 500)
+		# print(adata_filtered.X.shape)
