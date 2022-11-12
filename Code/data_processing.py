@@ -38,12 +38,12 @@ class SCpipeline():
 		axs[1,1].set_xlabel("count depth")
 		axs[1,1].set_ylabel("unique genes")
 
-	def closeup_viz(self, mindepth=1, maxdepth=800, mingenes=1, maxgenes=2500, figdims=[18,9])
+	def closeup_viz(self, mindepth=1, maxdepth=800, mingenes=1, maxgenes=2500, figdims=[18,9]):
 		fig, axs = plt.subplots(2, 1)
 		axs[0].hist(count_depth[np.where((count_depth <= maxdepth) & (count_depth >= mindepth))], bins=min([200,int(maxdepth/20)]),cumulative=False)
 		axs[1].hist(number_of_genes[np.where((number_of_genes<=maxgenes) & (number_of_genes >= mingenes))],bins=min([200,int(maxgenes/20)]),cumulative=False)
 
-	def remove_dead_cells(self, min_gene_counts = 1, min_count_depth = 300, min_genes_per_cell = 500)
+	def remove_dead_cells(self, min_gene_counts = 1, min_count_depth = 300, min_genes_per_cell = 500):
 		####
 		# WITHIN OUR NOTEBOOK I WOULD ADVIZE MAKINGA DEEP COPY OF THE DATA AND CALLING THIS FUNCTION ON THE COPY, THIS WILL SAVE YOU FROM HAVING TO RE-IMPORT THE CSV
 		####
@@ -54,3 +54,7 @@ class SCpipeline():
 		# print(adata_filtered.X.shape)
 		sc.pp.filter_cells(adata_filtered, min_genes = 500)
 		# print(adata_filtered.X.shape)
+	def cell_cycle_sorting(self):
+		cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx'
+		cell_cycle_dataset = sc.read_csv(cell_cycle_genes_file, first_column_names=True)
+		#scanpy.tl.score_genes_cell_cycle
