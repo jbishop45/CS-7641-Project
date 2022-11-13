@@ -73,10 +73,13 @@ class SCpipeline():
 		sc.tl.dpt(adata_filtered, n_dcs=14, n_branchings=0)
 		adata_filtered.obs["dpt_pseudotime"]
 
-	def import_cell_cycle_reference(self, cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx'):
+	def score_cell_cycle(self, cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx', g2m_start_index=91):
 		cell_cycle_file = sc.read_csv(cell_cycle_genes_file, first_column_names=True)
 		cell_cycle_genes = [x.strip() for x in open(cell_cycle_file)]
-		s_genes = cell_cycle_genes[:91]
-		g2m_genes = cell_cycle_genes[91:]
+		s_genes = cell_cycle_genes[:g2m_start_index]
+		g2m_genes = cell_cycle_genes[g2m_start_index:]
 		sc.tl.score_genes_cell_cycle(self.data, s_genes, g2m_genes)
+
+	def regress_cell_cycle(self):
+
 		
