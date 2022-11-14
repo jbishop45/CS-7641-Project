@@ -1,5 +1,6 @@
 # Trajectory Analysis of Single-Cell mRNA Sequencing Data 
 **TODO:** MAKE GITHUB PAGE PUBLIC AND SHARE LINK, ENSURE REPO IS PRIVATE BEFORE SUBMISSION
+
 **Authors:** Josh Bishop, Anjana Dissanayaka, Vishal Manickman, Nina Moorman, Jay Wroe
 
 **Instructor:** Prof. Mahdi Roozbahani
@@ -41,26 +42,40 @@ Our data cleaning process involved first removing genes which were not observed 
 We take care of missing features in our dataset by removing genes with low count values in the data cleaning process. The original dataset includes a reference list of all genes known to be expressed in mice, and it is normal for many of them to be absent in actual sequencing data. With >16000 out of 27300 possible features remaining in the dataset, confident identification of cells' position and trajectory in transcriptomic space is still very achievable. 
 The first step in our data preprocessing is gene count normalization. We rely on the ``sc.pp.normalize_total`` function in order to convert the raw gene count for each cell into counts out of 10,000. By doing this, the effect of cell-to-cell variations in count depth can be removed from measures of cell-to-cell variance in the relative levels of expression of individual genes. Following this normalization, we reduce the feature-space of our dataset by removing low-variance features, which hold little information about the differences between cells in our dataset which we leverage to cluster cells and predict their trajectory in gene expression space. We isolate the most variable genes using ``sc.pp.highly_variable_genes``. We determine the min and max mean input parameters as well as the min dispersion coefficient from prior work</sup>[13]</sup>. This reduced the features space of our sequencing data from 16216 to 2242 features.
 
-![Principle Components Variance](figures/Principle_Components_Variance.png)
-# TODO: NEAREST-NEIGHBOR GRAPH
+ # TODO: NEAREST-NEIGHBOR GRAPH
 
 #### Unsupervised Subproject - Graph Inference
 # TODO: update
-We obtain a graph of nearest-neighbor cells in transcriptomic<sup>I</sup> space from the unsupervised classifier <code>sklearn.neighbors.NearestNeighbors</code>, then compute a transition matrix representing the probability of each cell transitioning into another using previously described methods<sup>[5]</sup> (see figure above). <code>scanpy.tl.dpt</code> can then derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic<sup>I</sup> space of mature cells.
+Our aim here is to compute a nearest-neighbor’s graph of the distribution of our cells in this high-variance subspace, and then use that manifold to assign cells a DPT score. This is then used to order the cells along a continuous developmental process according to previously described methods</sup>[3]</sup>. Calculation of DPT scores with </code>scanpy.tl.dpt</code> requires selecting a small number of “diffusion components”, </code>n_dcs</code>, to represent the highly-variable gene space for the subsequent computation of the transition matrix. We noted values in the literature for this and equivalent function that range from 2 to 30; the function’s default value is 15. We determined our value for </code>n_dcs</code> by visualizing the amount of variance explained by each principal component defined by an SVD decomposition. As seen in **Fig. 2A**, there are two elbow points at which the variance ratio drops noticeably, which is why we decided to use the first 13 principal components to use in our nearest-neighbors computation.
+We then used these 13 components to generate a graph of the nearest-neighbors using </code>scanpy.pp.neighbors</code>. We hypothesized that at this stage, we should see a separation of the cells by when the samples were collected. To prove this visually, we color-coded each of the cells in the nearest-neighbors graph based on the feature containing information about which date they were collected, and found that the algorithm had indeed grouped the cells properly based on their transcriptome. Using previously described methods</sup>[5]</sup>, we then computed our transition matrix, which contains the probability of a given cell transitioning into its neighbor. This matrix was then fed into the </code>scanpy.tl.dpt</code> to derive a pseudotemporal ordering of immature cells differentiating into groups of mature cells and the mean positions in the transcriptomic space of mature cells.
+
+![Principle Components Variance](figures/Principle_Components_Variance.png)
+
 #### Supervised Subproject - Graph Annotation
-# TODO: update
-We determine the physiological role of the differentiated cells by mapping their transcriptomes<sup>I</sup> to representative transcriptomes<sup>I</sup> of labeled cell-types using <code>scanpy.tl.ingest</code>, which takes in a dimensionality-reduced representation of the reference data generated with <code>scanpy.tl.umap</code>.
+Cells undergo mitosis to divide and replenish the cells that have died. At equilibrium, there is a balance between cells that are dividing and cells that are carrying out metabolic processes unique to that cell type. Correspondingly, these cells express genes that are either ubiquitous to all cell division or unique to the functions of a given cell type. In order to remove the interference of cell division genes in cell-to-cell variation, we first need to identify genes that are associated with the DNA synthesis (S phase) and cell growth (G2 phase) stages of mitosis.
+To start, we take lists of known genes associated with different phases of the cell cycle, and we assign each cell an S-score that is a function of enrichment for those known genes (i.e. percentage of reads in a cell that are made up of S phase biomarkers). This score will serve as a normalized description of whether the S phase biomarkers are abundant or scarce in the cell.
+We then perform a regression of the expression of all the genes in the cell against the S-score for a given cell. Regressing out the variance for being in a given phase of the cell cycle allows us to determine the cell type regardless of the phase it is in, such that the remaining variance is due to the phenotype of the cell and not the phase of the cell cycle. 
+Cell-cycle scoring/regression resulted in a dataset that showed no effect of the cell cycle through PCA analysis. Figure 3A represents PCA reduction on the original data before cell-cycle regression. It’s clear from this figure that cells can be separated by their cell cycle stages when these genes are the primary features. Figure 3B represents PCA reduction after regressing out the cell-cycle gene effects. The reprojected dataset shows no clear separation between the different phases of the cell-cycle, indicating effective elimination of cell-cycle effects from our dataset. 
+
+![Phase Clustering](figures/phase_clustering.png)
+
+In our project, we compare the Kendall rank correlation of the data before and after cell-cycle regression to quantify the correlation between rankings of our dataset by collection date and by DPT score for each cell. Running this test allows us to compare how the accuracy of our predicted DPT score changes after cell-cycle regression. Kendall rank correlation is described in greater detail in the Quantitative Metrics section of this report.
+We will determine the physiological role of the differentiated cells by mapping their transcriptomes to representative transcriptomes of labeled archetypes using </code>scanpy.tl.ingest</code>, which takes in a reduced-dimension representation of the reference data generated with </code>scanpy.tl.umap</code>. Taken together with the DPT ranking of each cell type, we can assemble a complete story of how likely each cell type is to transition between different lineages on a continuum.
+
+#### Quantitative Metrics
+##### Unsupervised:
+We will use a clustering dispersion metric (e.g. Calinski-Harabasz Index) to evaluate the quality of our KNN clusters. We will use kendall rank correlation</sup>[3]</sup> to compare pseudotemporal ordering of cells to the collection time of those cells. Good correlation will indicate that the transition matrix orders cells according to primarily time-driven processes.
+One metric we use is the Kendall rank correlation of DPT score & collection date, which we use the </code>scipy.stats.kendalltau(x,y)</code> function for. The X input parameter to this function is the iterable containing collection date of each cell in the dataset. The Y input parameter to the function is set to be the iterable containing DPT score for each cell in the dataset. This metric returns tau and a p_value. Tau is a value in the range of [-1, 1], which can be interpreted to mean that the two inputs (X and Y) are strongly correlated (tau ~ 1), not correlated (tau ~ 0), or anticorrelated (tau ~ -1). The p_value is the probability that our null hypothesis – that there exists no correlation between datasets X and Y – is true. We hypothesized that if the DPT score is correlated with the collection date, tau would be close to 1 and the p_value less than the generally accepted threshold of 0.05.
+##### Supervised:
+Given the ground truths, we can employ matching-based (e.g. F-measure), entropy-based (e.g. Normalized mutual information), or pairwise measures (e.g. Jaccard coefficient) to evaluate supervised classification. All methods will use a Euclidean distance metric in transcriptomic space.
 
 ### Results and Discussion
-#### Data Cleaning
 # TODO: update
-#### Data Pre-Processing
-# TODO: update
-#### Supervised/Unsupervised Method & Results
-# TODO: at least 1 supervised/unsupervised method implemented w/ results and metrics
+
+### Discussion
+We have completed our data cleaning and preprocessing, and having ordered are cells according to time dependent processes, are nearly finished with Research Question 1. Early studies on diffusion pseudotime used manual selection of arbitrary cells to act as roots for detecting branching points in time-depentend cell development processes. 
 
 ## Proposed Timeline & Contribution Table
-# TODO: update
 ![Proposal Timeline](figures/proposal_timeline.png)
 ![Gantt Chart](figures/gantt_chart.png)
 
