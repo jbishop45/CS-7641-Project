@@ -54,7 +54,32 @@ class SCpipeline():
 		# print(adata_filtered.X.shape)
 		sc.pp.filter_cells(adata_filtered, min_genes = 500)
 		# print(adata_filtered.X.shape)
-	def cell_cycle_sorting(self):
-		cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx'
-		cell_cycle_dataset = sc.read_csv(cell_cycle_genes_file, first_column_names=True)
-		#scanpy.tl.score_genes_cell_cycle
+
+	def norm_and_high_var(self, target_sum=1e4, min_mean=0.0125, max_mean=3, min_disp=0.5):
+		# within each cell, normalize count of genes to 10,000
+		sc.pp.normalize_total(self.data, target_sum=target_sum)
+		sc.pp.log1p(self.data)
+		# filter out any genes with less than 0.0125/10,000 mean expression AND(?) dispersion (across all cells) less than 0.5
+		sc.pl.highly_variable_genes(self.data)
+		sc.pp.highly_variable_genes(self.data, min_mean=min_mean, max_mean=max_mean, min_disp=min_disp)
+		self.data.raw = self.data
+
+	def assign_PCs(self, svd_solver='arpack'):
+		sc.tl.pca(adata_filtered, svd_solver=svd_solver)
+
+	def assign_dpt_scores(self, root_index=0):
+		adata_filtered.uns['iroot'] = root_index
+		sc.pp.neighbors(adata_filtered, n_neighbors=15, n_pcs=14, knn=True, random_state=0, method='gauss', metric='euclidean', key_added=None, copy=False)
+		sc.tl.dpt(adata_filtered, n_dcs=14, n_branchings=0)
+		adata_filtered.obs["dpt_pseudotime"]
+
+	def score_cell_cycle(self, cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx', g2m_start_index=91):
+		cell_cycle_file = sc.read_csv(cell_cycle_genes_file, first_column_names=True)
+		cell_cycle_genes = [x.strip() for x in open(cell_cycle_file)]
+		s_genes = cell_cycle_genes[:g2m_start_index]
+		g2m_genes = cell_cycle_genes[g2m_start_index:]
+		sc.tl.score_genes_cell_cycle(self.data, s_genes, g2m_genes)
+
+	def regress_cell_cycle(self):
+
+		
