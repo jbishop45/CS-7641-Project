@@ -73,13 +73,30 @@ class SCpipeline():
 		sc.tl.dpt(adata_filtered, n_dcs=14, n_branchings=0)
 		adata_filtered.obs["dpt_pseudotime"]
 
-	def score_cell_cycle(self, cell_cycle_genes_file = 'adjusted_dataset_cell_cycle_genes.xlsx', g2m_start_index=91):
-		cell_cycle_file = sc.read_csv(cell_cycle_genes_file, first_column_names=True)
-		cell_cycle_genes = [x.strip() for x in open(cell_cycle_file)]
+	def cell_cycle_genes(self, cell_cycle_genes_file = 'cell_cycle_genes.txt'):
+		cell_cycle_genes = [x.strip() for x in open(cell_cycle_genes_file)]
+		cell_cycle_genes = [x for x in cell_cycle_genes if x in self.filtered_data.var_names]
+		return cell_cycle_genes
+	
+	def score_cell_cycle(self,cell_cycle_genes, g2m_start_index=91):
+		
 		s_genes = cell_cycle_genes[:g2m_start_index]
 		g2m_genes = cell_cycle_genes[g2m_start_index:]
-		sc.tl.score_genes_cell_cycle(self.data, s_genes, g2m_genes)
+
+		#Before running cell-cyle scoring, the data has to be normalized and log transformed using the functions below. This may occur after filtering, commented out for now just in case.
+
+		#sc.pp.normalize_per_cell(self.filtered_data)
+		#sc.pp.log1p(self.filtered_data)
+		#sc.pp.scale(self.filtered_data)
+
+		sc.tl.score_genes_cell_cycle(self.filtered_data, s_genes, g2m_genes)
 
 	def regress_cell_cycle(self):
-
+		sc.pp.regress_out(self.filtered_data, ['S_score', 'G2M_score'])
+		sc.pp.scale(self.filtered_data)
+	
+	def PCA_cell_cycle(self, cell_cycle_genes):
+		adata_cc_genes =self.filtered_data[:, cell_cycle_genes]
+		sc.tl.pca(adata_cc_genes)
+		sc.pl.pca(adata_cc_genes, color='phase', size = 30)
 		
