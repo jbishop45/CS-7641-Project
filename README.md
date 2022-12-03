@@ -3,8 +3,9 @@
 
 **Instructor:** Prof. Mahdi Roozbahani
 
-**Submitted:** November 13, 2022
+**Submitted:** December 6, 2022
 
+# TODO: UPDATE FOR FINAL SUBMISSION
 ## Introduction/Background 
 ### Topic
 Single-cell mRNA sequencing (scRNA-seq) has generated petabytes of data detailing the transcriptomes<sup>I</sup> of billions of cells, generating insights ranging from biomarkers<sup>II</sup> of disease states to the discovery of new cell-types. Diverse methods for generating these data cause high variability in the number & similarity of cells sequenced, and mRNAs sequenced per cell<sup>[6,11,12]</sup>. Developing robust methods for sc-RNAseq analysis is critical to standardizing analytical results and expediting scientific discoveries<sup>[6,11,12]</sup>.
@@ -19,6 +20,7 @@ Our goals are: (1) identify distinct populations of cells differentiating from a
 
 ![Proposal Figure](figures/proposal_figure.png)
 
+# MULTIPLE PREDICTIVE MODELS AND EVALUATION
 ### Results and Discussion
 #### Research Questions
 * **RQ1.** Can we order cells along an arbitrary branching process using scRNA-seq data? 
@@ -75,6 +77,9 @@ At this point in our project we have completed our data cleaning and preprocessi
 We first propose to employ non-metric multidimensional scaling (NMDS) via the <code>sklearn.manifold.MDS()</code> function. This entails passing in the dissimilarity matrix, computing rank-order distances with which the original distances are regressed on, and using this regressed distance to compute the Kruskal Stress (alignment of rank-order with regressed list of original distances). We can then reorganize rank-order until Stress falls below our stress threshold, indicating proper alignment in reduced-dimension space. 
 We additionally propose to perform an Analysis of Similarity (ANOSIM) via the <code>skbio.stats.distance.anosim()</code> function. This function takes in as a parameter the dissimilarity matrix and outputs a measure of the difference between groups of samples to determine if a specific group is more responsible for the variation than the entire group taken together. Note that ANOSIM does not assume a certain distribution of data. 
 
+# CONCLUSION
+
+# UPDATE CONTRIBUTION TABLE, DROP TIMELINE?
 ## Proposed Timeline & Contribution Table
 ![Proposal Timeline](figures/proposal_timeline.png)
 ![Gantt Chart](figures/gantt_chart.png)
